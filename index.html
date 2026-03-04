@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RR2 Conquest SV Calculator (Modern)</title>
+    <title>Great Capybara Calculator</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; color: #333; }
         .calculator { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
         h2 { text-align: center; color: #2c3e50; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 10px; gap: 20px; }
         .column { width: 48%; }
         label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
         input, select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .time-inputs { display: flex; gap: 10px; }
-        .time-inputs input { width: 50%; }
-        button { width: 100%; padding: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        
+        /* Fixed Time Inputs Layout */
+        .time-inputs { display: flex; gap: 15px; margin-bottom: 10px; }
+        .time-inputs div { flex: 1; }
+        .time-inputs input { width: 100%; }
+        
+        button { width: 100%; padding: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         button:hover { background-color: #c0392b; }
         .result-box { margin-top: 20px; padding: 15px; background-color: #ecf0f1; border-radius: 4px; text-align: center; }
         .result-value { font-size: 24px; font-weight: bold; color: #e74c3c; }
@@ -24,7 +28,7 @@
 <body>
 
 <div class="calculator">
-    <h2>Supreme Victory Calculator</h2>
+    <h2>Great Capybara Calculator</h2>
     
     <div class="row">
         <div class="column">
@@ -35,14 +39,21 @@
             <input type="number" id="atkTroops" value="8458" min="0">
             <label>Terrain Modifier (Decimal)</label>
             <input type="number" id="atkTerrain" value="1.0" step="0.1" min="0">
-            <label>Watchtower Level Base (1.0 - 2.5)</label>
-            <input type="number" id="atkTowerBase" value="1.0" step="0.1" min="1.0">
+            
             <label>Tech: Hero Buff (+)</label>
-            <select id="atkHeroTech"><option value="0">0</option><option value="5">5</option><option value="10">10</option><option value="15">15</option></select>
+            <select id="atkHeroTech">
+                <option value="0">0</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
             <label>Tech: Troop Buff (+)</label>
-            <select id="atkTroopTech"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
-            <label>Tech: Tower Buff (%)</label>
-            <select id="atkTowerTech"><option value="0">0</option><option value="10">10</option><option value="20">20</option><option value="30">30</option></select>
+            <select id="atkTroopTech">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
         
         <div class="column">
@@ -53,14 +64,31 @@
             <input type="number" id="defTroops" value="4900" min="0">
             <label>Terrain Modifier (Decimal)</label>
             <input type="number" id="defTerrain" value="0.8" step="0.1" min="0">
+            
             <label>Watchtower Level Base (1.0 - 2.5)</label>
-            <input type="number" id="defTowerBase" value="1.2" step="0.1" min="1.0">
-            <label>Tech: Hero Buff (+)</label>
-            <select id="defHeroTech"><option value="0">0</option><option value="5">5</option><option value="10">10</option><option value="15">15</option></select>
-            <label>Tech: Troop Buff (+)</label>
-            <select id="defTroopTech"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+            <input type="number" id="defTowerBase" value="1.44" step="0.01" min="1.0">
             <label>Tech: Tower Buff (%)</label>
-            <select id="defTowerTech"><option value="0">0</option><option value="10">10</option><option value="20">20</option><option value="30">30</option></select>
+            <select id="defTowerTech">
+                <option value="0">0</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+            </select>
+            
+            <label>Tech: Hero Buff (+)</label>
+            <select id="defHeroTech">
+                <option value="0">0</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+            <label>Tech: Troop Buff (+)</label>
+            <select id="defTroopTech">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
     </div>
 
@@ -77,7 +105,7 @@
         </div>
     </div>
 
-    <button onclick="calculateSV()">Calculate Supreme Victory</button>
+    <button onclick="calculateSV()">Calculate</button>
 
     <div class="result-box">
         <div>Required Skull Lead:</div>
@@ -98,8 +126,8 @@
         let hAtk = getVal('atkHeroes'), hDef = getVal('defHeroes');
         let tAtk = getVal('atkTroops'), tDef = getVal('defTroops');
         
-        // Calculate Attack Rating
-        let atkTowerMod = getVal('atkTowerBase') * (1 + (getVal('atkTowerTech') / 100));
+        // Calculate Attack Rating (Tower Mod for attacker is always 1.0)
+        let atkTowerMod = 1.0;
         let atkRating = (hAtk * (HERO_BASE + getVal('atkHeroTech')) + tAtk * (1 + getVal('atkTroopTech'))) * getVal('atkTerrain') * atkTowerMod;
 
         // Calculate Defense Rating
