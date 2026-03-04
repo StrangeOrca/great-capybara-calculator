@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Great Capybara Calculator</title>
+    <title>Калькулятор Великой Капибары</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; color: #333; }
         .calculator { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
@@ -28,26 +28,26 @@
 <body>
 
 <div class="calculator">
-    <h2>Great Capybara Calculator</h2>
+    <h2>Калькулятор Великой Капибары</h2>
     
     <div class="row">
         <div class="column">
-            <h3>Attacker</h3>
-            <label>Heroes</label>
-            <input type="number" id="atkHeroes" value="18" min="0">
-            <label>Troops</label>
-            <input type="number" id="atkTroops" value="8458" min="0">
-            <label>Terrain Modifier (Decimal)</label>
+            <h3>Атакующий</h3>
+            <label>Герои</label>
+            <input type="number" id="atkHeroes" value="3" min="0">
+            <label>Войска</label>
+            <input type="number" id="atkTroops" value="1050" min="0">
+            <label>Множитель местности (Например: 1.0, 0.8)</label>
             <input type="number" id="atkTerrain" value="1.0" step="0.1" min="0">
             
-            <label>Tech: Hero Buff (+)</label>
+            <label>Технологии: Бафф героев (+)</label>
             <select id="atkHeroTech">
                 <option value="0">0</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
             </select>
-            <label>Tech: Troop Buff (+)</label>
+            <label>Технологии: Бафф войск (+)</label>
             <select id="atkTroopTech">
                 <option value="0">0</option>
                 <option value="1">1</option>
@@ -57,17 +57,17 @@
         </div>
         
         <div class="column">
-            <h3>Defender</h3>
-            <label>Heroes</label>
-            <input type="number" id="defHeroes" value="10" min="0">
-            <label>Troops</label>
-            <input type="number" id="defTroops" value="4900" min="0">
-            <label>Terrain Modifier (Decimal)</label>
-            <input type="number" id="defTerrain" value="0.8" step="0.1" min="0">
+            <h3>Защитник</h3>
+            <label>Герои</label>
+            <input type="number" id="defHeroes" value="1" min="0">
+            <label>Войска</label>
+            <input type="number" id="defTroops" value="350" min="0">
+            <label>Множитель местности (Например: 1.0, 0.8)</label>
+            <input type="number" id="defTerrain" value="1.0" step="0.1" min="0">
             
-            <label>Watchtower Level Base (1.0 - 2.5)</label>
-            <input type="number" id="defTowerBase" value="1.44" step="0.01" min="1.0">
-            <label>Tech: Tower Buff (%)</label>
+            <label>База сторожевой башни (1.0 - 2.5)</label>
+            <input type="number" id="defTowerBase" value="1.2" step="0.01" min="1.0">
+            <label>Технологии: Бафф башни (%)</label>
             <select id="defTowerTech">
                 <option value="0">0</option>
                 <option value="10">10</option>
@@ -75,14 +75,14 @@
                 <option value="30">30</option>
             </select>
             
-            <label>Tech: Hero Buff (+)</label>
+            <label>Технологии: Бафф героев (+)</label>
             <select id="defHeroTech">
                 <option value="0">0</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
             </select>
-            <label>Tech: Troop Buff (+)</label>
+            <label>Технологии: Бафф войск (+)</label>
             <select id="defTroopTech">
                 <option value="0">0</option>
                 <option value="1">1</option>
@@ -93,22 +93,22 @@
     </div>
 
     <hr>
-    <h3>Time Remaining</h3>
+    <h3>Оставшееся время</h3>
     <div class="time-inputs">
         <div>
-            <label>Hours</label>
+            <label>Часы</label>
             <input type="number" id="timeHours" value="16" min="0" max="24">
         </div>
         <div>
-            <label>Minutes</label>
-            <input type="number" id="timeMinutes" value="41" min="0" max="59">
+            <label>Минуты</label>
+            <input type="number" id="timeMinutes" value="0" min="0" max="59">
         </div>
     </div>
 
-    <button onclick="calculateSV()">Calculate</button>
+    <button onclick="calculateSV()">Рассчитать</button>
 
     <div class="result-box">
-        <div>Required Skull Lead:</div>
+        <div>Необходимое преимущество в черепах:</div>
         <div class="result-value" id="resultLead">0</div>
         <div class="stats" id="debugStats"></div>
     </div>
@@ -150,8 +150,8 @@
         }
 
         // Update UI
-        document.getElementById('resultLead').innerText = Math.round(requiredLead).toLocaleString();
-        document.getElementById('debugStats').innerHTML = `AR: ${Math.round(atkRating)} | DR: ${Math.round(defRating)} | TimeMod: ${timeMod.toFixed(3)}`;
+        document.getElementById('resultLead').innerText = Math.round(requiredLead).toLocaleString('ru-RU');
+        document.getElementById('debugStats').innerHTML = `Атака (AR): ${Math.round(atkRating)} | Защита (DR): ${Math.round(defRating)} | Множитель времени: ${timeMod.toFixed(3)}`;
     }
     
     // Run once on load to show initial math
