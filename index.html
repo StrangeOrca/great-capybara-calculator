@@ -13,9 +13,6 @@
         label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
         input, select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         
-        /* Фиолетовая подсветка для новых полей черепов */
-        .skull-input { border: 1px solid #9b59b6; background-color: #fcf3ff; }
-        
         .time-inputs { display: flex; gap: 15px; margin-bottom: 10px; }
         .time-inputs div { flex: 1; }
         .time-inputs input { width: 100%; }
@@ -27,9 +24,9 @@
         .result-container { display: flex; justify-content: space-around; margin-top: 10px; }
         .result-col { width: 45%; }
         .result-title { font-size: 14px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
-        .result-value-atk { font-size: 24px; font-weight: bold; color: #e74c3c; } 
-        .result-value-def { font-size: 24px; font-weight: bold; color: #3498db; } 
-        .stats { font-size: 11px; color: #7f8c8d; margin-top: 15px; line-height: 1.4; }
+        .result-value-atk { font-size: 24px; font-weight: bold; color: #e74c3c; }
+        .result-value-def { font-size: 24px; font-weight: bold; color: #3498db; }
+        .stats { font-size: 12px; color: #7f8c8d; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -40,20 +37,19 @@
     <div class="row">
         <div class="column">
             <h3>Атакующий</h3>
-            <label style="color: #8e44ad;">Набрано черепов</label>
-            <input type="number" id="atkSkulls" class="skull-input" value="276684">
-            
+            <label>Набрано черепов</label>
+            <input type="number" id="atkSkulls" value="0" min="0">
             <label>Герои</label>
-            <input type="number" id="atkHeroes" value="18" min="0">
+            <input type="number" id="atkHeroes" value="3" min="0">
             <label>Войска</label>
-            <input type="number" id="atkTroops" value="8458" min="0">
-            <label>Множитель местности</label>
+            <input type="number" id="atkTroops" value="1050" min="0">
+            <label>Множитель местности (Например: 1.0, 0.8)</label>
             <input type="number" id="atkTerrain" value="1.0" step="0.1" min="0">
             
             <label>Технологии: Бафф героев (+)</label>
             <select id="atkHeroTech">
-                <option value="0">0</option>
-                <option value="5" selected>5</option>
+                <option value="0" selected>0</option>
+                <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
             </select>
@@ -68,18 +64,17 @@
         
         <div class="column">
             <h3>Защитник</h3>
-            <label style="color: #8e44ad;">Набрано черепов</label>
-            <input type="number" id="defSkulls" class="skull-input" value="76820">
-
+            <label>Набрано черепов</label>
+            <input type="number" id="defSkulls" value="0" min="0">
             <label>Герои</label>
-            <input type="number" id="defHeroes" value="10" min="0">
+            <input type="number" id="defHeroes" value="1" min="0">
             <label>Войска</label>
-            <input type="number" id="defTroops" value="4900" min="0">
-            <label>Множитель местности</label>
-            <input type="number" id="defTerrain" value="0.8" step="0.1" min="0">
+            <input type="number" id="defTroops" value="350" min="0">
+            <label>Множитель местности (Например: 1.0, 0.8)</label>
+            <input type="number" id="defTerrain" value="1.0" step="0.1" min="0">
             
-            <label>База башни (1.0 - 2.5)</label>
-            <input type="number" id="defTowerBase" value="1.44" step="0.01" min="1.0">
+            <label>База сторожевой башни (1.0 - 2.5)</label>
+            <input type="number" id="defTowerBase" value="1.2" step="0.01" min="1.0">
             <label>Технологии: Бафф башни (%)</label>
             <select id="defTowerTech">
                 <option value="0" selected>0</option>
@@ -114,7 +109,7 @@
         </div>
         <div>
             <label>Минуты</label>
-            <input type="number" id="timeMinutes" value="41" min="0" max="59">
+            <input type="number" id="timeMinutes" value="0" min="0" max="59">
         </div>
     </div>
 
@@ -140,48 +135,44 @@
     function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
 
     function calculateSV() {
-        // Константы, подтвержденные скриншотами
-        const HERO_BASE = 75; 
+        // Константы из обновленной механики (7.3.0)
+        const HERO_BASE = 75;
         const TROOP_BASE = 1;
-        const K_CONSTANT = 22500; 
+        const K_CONSTANT = 22500;
 
-        // Рейтинг Атаки
+        // Расчет рейтинга Атаки
         let hAtk = getVal('atkHeroes'), tAtk = getVal('atkTroops');
         let ar = (hAtk * (HERO_BASE + getVal('atkHeroTech')) + tAtk * (TROOP_BASE + getVal('atkTroopTech'))) * getVal('atkTerrain');
 
-        // Рейтинг Защиты
+        // Расчет рейтинга Защиты
         let hDef = getVal('defHeroes'), tDef = getVal('defTroops');
         let towerMod = getVal('defTowerBase') * (1 + (getVal('defTowerTech') / 100));
         let dr = (hDef * (HERO_BASE + getVal('defHeroTech')) + tDef * (TROOP_BASE + getVal('defTroopTech'))) * getVal('defTerrain') * towerMod;
 
-        // Множитель времени (16ч -> 4ч)
-        let totalMins = (getVal('timeHours') * 60) + getVal('timeMinutes');
+        // Расчет времени (спад от 16ч до 4ч)
+        let timeInHours = getVal('timeHours') + (getVal('timeMinutes') / 60);
         let timeMod = 0.7;
-        if (totalMins > 240) {
-            timeMod = 0.7 + (Math.min(totalMins, 960) - 240) / 720 * 0.3;
+        if (timeInHours > 4) {
+            timeMod = 0.7 + (Math.min(timeInHours, 16) - 4) / 12 * 0.3;
         }
 
-        // Расчет требуемого ЛИДЕРСТВА
+        // Требуемый отрыв
         let reqLeadAtk = (dr / ar) * (hAtk * K_CONSTANT) * timeMod;
         let reqLeadDef = (ar / dr) * (hDef * K_CONSTANT) * timeMod;
 
-        // Текущий разрыв
-        let curAtkSkulls = getVal('atkSkulls');
-        let curDefSkulls = getVal('defSkulls');
-        let curLeadAtk = curAtkSkulls - curDefSkulls;
-        let curLeadDef = curDefSkulls - curAtkSkulls;
+        // Текущий отрыв
+        let atkSkulls = getVal('atkSkulls'), defSkulls = getVal('defSkulls');
+        let currentLeadAtk = atkSkulls - defSkulls;
+        let currentLeadDef = defSkulls - atkSkulls;
 
-        // Сколько ОСТАЛОСЬ (Требуемое лидерство - Текущее лидерство)
-        let finalAtk = Math.max(0, Math.ceil(reqLeadAtk - curLeadAtk));
-        let finalDef = Math.max(0, Math.ceil(reqLeadDef - curLeadDef));
+        // Сколько осталось
+        let resultAtk = Math.max(0, Math.ceil(reqLeadAtk - currentLeadAtk));
+        let resultDef = Math.max(0, Math.ceil(reqLeadDef - currentLeadDef));
 
-        // Вывод
-        document.getElementById('resultLeadAtk').innerText = finalAtk.toLocaleString('ru-RU');
-        document.getElementById('resultLeadDef').innerText = finalDef.toLocaleString('ru-RU');
-        
-        document.getElementById('debugStats').innerHTML = 
-            `AR: ${Math.round(ar)} | DR: ${Math.round(dr)} | T-Mod: ${timeMod.toFixed(3)}<br>` +
-            `Цель (Lead): Аткак ${Math.round(reqLeadAtk).toLocaleString()} | Защ ${Math.round(reqLeadDef).toLocaleString()}`;
+        // Вывод данных
+        document.getElementById('resultLeadAtk').innerText = resultAtk.toLocaleString('ru-RU');
+        document.getElementById('resultLeadDef').innerText = resultDef.toLocaleString('ru-RU');
+        document.getElementById('debugStats').innerHTML = `AR: ${Math.round(ar)} | DR: ${Math.round(dr)} | TimeMod: ${timeMod.toFixed(3)}`;
     }
     
     calculateSV();
