@@ -2,85 +2,146 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>RR2: Supreme Victory Calc</title>
+    <title>RR2: Полный калькулятор SV</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: #eee; display: flex; justify-content: center; padding: 20px; }
-        .calc-card { background: #2d2d2d; padding: 25px; border-radius: 15px; border: 2px solid #d4af37; width: 450px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
-        input { width: 80px; padding: 5px; border-radius: 5px; border: 1px solid #444; background: #111; color: #fff; text-align: center; }
-        .side-title { color: #5dade2; font-weight: bold; border-bottom: 1px solid #444; margin-bottom: 10px; display: block; }
-        .result-area { margin-top: 20px; padding: 15px; background: #1e3d2b; border-radius: 10px; text-align: center; }
-        .needed-val { font-size: 24px; color: #2ecc71; font-weight: bold; display: block; }
+        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; color: white; display: flex; justify-content: center; padding: 20px; }
+        .calc-card { background: #34495e; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 550px; }
+        h2 { text-align: center; color: #f1c40f; border-bottom: 2px solid #f1c40f; padding-bottom: 10px; margin-top: 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .side-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; }
+        .side-title { font-weight: bold; display: block; margin-bottom: 10px; border-left: 4px solid #3498db; padding-left: 10px; }
+        .input-group { margin-bottom: 8px; }
+        label { font-size: 0.8em; color: #bdc3c7; display: block; }
+        input, select { width: 100%; padding: 6px; border-radius: 4px; border: none; background: #ecf0f1; box-sizing: border-box; margin-top: 2px; }
+        .time-section { margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; display: flex; justify-content: space-around; align-items: center; }
+        .result-box { background: #27ae60; padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px; }
+        .needed-val { font-size: 1.8em; font-weight: bold; color: #fff; display: block; }
+        .current-skulls { background: #1a252f !important; color: #f1c40f !important; font-weight: bold; border: 1px solid #f1c40f !important; }
     </style>
 </head>
 <body>
 
 <div class="calc-card">
-    <h2>Supreme Victory</h2>
+    <h2>Supreme Victory Calculator</h2>
 
-    <span class="side-title">Сторона Победителя (кто ведет)</span>
-    <div class="row"><span>Рейтинг (Total Rating):</span><input type="number" id="win_rate" value="1725"></div>
-    <div class="row"><span>Героев на клетке:</span><input type="number" id="win_heroes" value="3"></div>
-    <div class="row"><span>Набрано черепов:</span><input type="number" id="win_skulls" value="6019"></div>
+    <div class="grid">
+        <!-- АТАКУЮЩИЙ -->
+        <div class="side-box">
+            <span class="side-title" style="border-color: #e74c3c;">Атакующий</span>
+            <div class="input-group">
+                <label>Набрано черепов:</label>
+                <input type="number" id="a_skulls" class="current-skulls" value="276684">
+            </div>
+            <div class="input-group">
+                <label>Герои:</label>
+                <input type="number" id="a_heroes" value="18">
+            </div>
+            <div class="input-group">
+                <label>Войска:</label>
+                <input type="number" id="a_troops" value="8458">
+            </div>
+            <div class="input-group">
+                <label>Бонус техн. (+):</label>
+                <input type="number" id="a_tech" value="5">
+            </div>
+            <div class="input-group">
+                <label>Множитель местности:</label>
+                <input type="number" id="a_terrain" value="1.0" step="0.1">
+            </div>
+        </div>
 
-    <br>
-    <span class="side-title" style="color:#e74c3c;">Сторона Проигравшего</span>
-    <div class="row"><span>Рейтинг (Total Rating):</span><input type="number" id="lose_rate" value="575"></div>
-    <div class="row"><span>Набрано черепов:</span><input type="number" id="lose_skulls" value="0"></div>
-
-    <br>
-    <span class="side-title" style="color:#f1c40f;">Время</span>
-    <div class="row"><span>Осталось (ч:мин):</span>
-        <div>
-            <input type="number" id="h" value="13" style="width:40px"> : 
-            <input type="number" id="m" value="54" style="width:40px">
+        <!-- ЗАЩИТНИК -->
+        <div class="side-box">
+            <span class="side-title" style="border-color: #2ecc71;">Защитник</span>
+            <div class="input-group">
+                <label>Набрано черепов:</label>
+                <input type="number" id="d_skulls" class="current-skulls" value="76820">
+            </div>
+            <div class="input-group">
+                <label>Герои:</label>
+                <input type="number" id="d_heroes" value="10">
+            </div>
+            <div class="input-group">
+                <label>Войска:</label>
+                <input type="number" id="d_troops" value="4900">
+            </div>
+            <div class="input-group">
+                <label>Башня (множитель):</label>
+                <input type="number" id="d_tower" value="1.44" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>Множитель местности:</label>
+                <input type="number" id="d_terrain" value="0.8" step="0.1">
+            </div>
         </div>
     </div>
 
-    <div class="result-area">
-        Нужно набрать еще:
+    <!-- ВРЕМЯ -->
+    <div class="time-section">
+        <span>Время до конца:</span>
+        <div style="display:flex; align-items:center; gap:5px;">
+            <input type="number" id="t_h" value="16" style="width:50px"> ч.
+            <input type="number" id="t_m" value="41" style="width:50px"> мин.
+        </div>
+    </div>
+
+    <!-- РЕЗУЛЬТАТ -->
+    <div class="result-box">
+        Нужно еще черепов для SV:
         <span id="result" class="needed-val">0</span>
     </div>
 </div>
 
 <script>
-    function update() {
-        const K = 22500;
-        
-        let wRate = parseFloat(document.getElementById('win_rate').value) || 1;
-        let wHeroes = parseFloat(document.getElementById('win_heroes').value) || 1;
-        let wSkulls = parseFloat(document.getElementById('win_skulls').value) || 0;
-        
-        let lRate = parseFloat(document.getElementById('lose_rate').value) || 1;
-        let lSkulls = parseFloat(document.getElementById('lose_skulls').value) || 0;
-        
-        let hrs = parseFloat(document.getElementById('h').value) || 0;
-        let mins = parseFloat(document.getElementById('m').value) || 0;
-        let totalMins = (hrs * 60) + mins;
+    function calculate() {
+        const K = 22500; // Проверенная константа
+        const B_HERO = 75;
+        const B_TROOP = 1;
 
-        // Расчет фактора времени (плавный спад от 16ч до 4ч)
-        // 960 мин (16ч) -> 240 мин (4ч)
-        let tFactor = 1.0;
+        // Данные атаки
+        let aS = parseFloat(document.getElementById('a_skulls').value) || 0;
+        let aH = parseFloat(document.getElementById('a_heroes').value) || 0;
+        let aT = parseFloat(document.getElementById('a_troops').value) || 0;
+        let aTech = parseFloat(document.getElementById('a_tech').value) || 0;
+        let aTerr = parseFloat(document.getElementById('a_terrain').value) || 1;
+
+        // Данные защиты
+        let dS = parseFloat(document.getElementById('d_skulls').value) || 0;
+        let dH = parseFloat(document.getElementById('d_heroes').value) || 0;
+        let dT = parseFloat(document.getElementById('d_troops').value) || 0;
+        let dTower = parseFloat(document.getElementById('d_tower').value) || 1;
+        let dTerr = parseFloat(document.getElementById('d_terrain').value) || 1;
+
+        // Время
+        let hrs = parseFloat(document.getElementById('t_h').value) || 0;
+        let mins = parseFloat(document.getElementById('t_m').value) || 0;
+        let totalMins = (hrs * 60) + mins;
+        
+        // Фактор времени (decay 16h -> 4h)
+        let tFactor = 0.7;
         if (totalMins > 240) {
-            // Линейная интерполяция между 0.7 и 1.0 в зависимости от времени
             tFactor = 0.7 + (Math.min(totalMins, 960) - 240) / 720 * 0.3;
-        } else {
-            tFactor = 0.7;
         }
 
-        // Основная формула
-        let ratio = lRate / wRate;
-        let totalLeadRequired = ratio * (wHeroes * K) * tFactor;
+        // Рейтинги (как в игре)
+        let ar = (aH * (B_HERO + aTech) + aT * B_TROOP) * aTerr;
+        let dr = (dH * B_HERO + dT * B_TROOP) * dTerr * dTower;
+
+        if (ar === 0) return;
+
+        // Лидерство
+        let ratio = dr / ar;
+        let totalLeadRequired = ratio * (aH * K) * tFactor;
         
-        let currentLead = wSkulls - lSkulls;
+        // Текущий разрыв
+        let currentLead = aS - dS;
         let needed = Math.ceil(totalLeadRequired - currentLead);
 
-        document.getElementById('result').innerText = needed > 0 ? needed.toLocaleString() : "SV ГОТОВ!";
+        document.getElementById('result').innerText = needed > 0 ? needed.toLocaleString() : "SV ДОСТИГНУТ!";
     }
 
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+    document.querySelectorAll('input').forEach(el => el.oninput = calculate);
+    calculate();
 </script>
 
 </body>
